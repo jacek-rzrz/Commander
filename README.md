@@ -1,11 +1,9 @@
-![](https://raw.githubusercontent.com/Keeper-Security/Commander/master/keepercommander/images/commander_logo_512x205.png)
+![](https://raw.githubusercontent.com/Keeper-Security/Commander/master/keepercommander/images/commander_logo_250x100.png)
 
 ----
-#### The Password Management SDK for IT Admins & Developers
+### Password Management SDK for IT Admins & Developers
 
 Keeper Security develops the world's most downloaded password manager and encrypted digital vault with millions of individual customers and thousands of enterprise customers worldwide.  Keeper offers a zero-knowledge, cloud-based solution to consumers, families and businesses to protect and secure their most sensitive and private information. Keeper Password Manager is available on every mobile and desktop device. <a href="#about-keeper">Read more</a> about Keeper or visit the [Keeper Security](https://keepersecurity.com) website.
-
-### Keeper Commander
 
 Keeper Commander is a command-line, interactive shell and SDK interface to [Keeper&reg; Password Manager](https://keepersecurity.com). Commander can be used to access and control your Keeper vault, rotate passwords and perform Keeper Enterprise administrative functions related to user onboarding and provisioning of vault records.
 
@@ -24,9 +22,48 @@ Keeper Commander is an open source project written in Python, and it is under co
 * Integrate Keeper into your existing backend systems 
 * Schedule and automate commands 
 
-### Developer Setup 
+### Commander Installation - Typical Usage (Non-Developer Mode)
 
-If you plan to write custom code, we recommend following the [developer setup instructions](https://github.com/Keeper-Security/Commander/tree/master/keepercommander).
+
+
+### Commander Installation - Developer Mode
+
+This type of installation assumes you want to view/modify the Python source code (Compatible with Python 3.4+).
+
+1. Install Python3 from python.org
+
+2. Install virtualenv:
+
+```
+sudo pip3 install virtualenv
+```
+
+3. Create and activate the virtual environment for your keeper project:
+```
+cd /path/to/Commander
+virtualenv -p python3 venv
+source venv/bin/activate
+pip install -r requirements.txt
+pip install -e .
+```
+
+Keeper supports plugins for various 3rd party systems for password reset integration. Depending on the plugin, you will need to install the modules required. For example, to support our MySQL plugin:
+
+pip3 install PyMySQL
+Set up a Keeper account from https://keepersecurity.com if you don't already have one.
+
+Run Keeper by typing
+```
+keeper
+```
+
+To run the interactive shell, type:
+
+```
+keeper shell
+```
+
+See the [custom](https://github.com/Keeper-Security/Commander/tree/master/keepercommander/custom) folder for examples on creating your own custom scripts to interface with Keeper from your own source code.
 
 ### Installation - Linux and Mac
 
