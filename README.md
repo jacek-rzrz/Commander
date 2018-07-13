@@ -22,49 +22,6 @@ Keeper Commander is an open source project written in Python, and it is under co
 * Integrate Keeper into your existing backend systems 
 * Schedule and automate commands 
 
-### Commander Installation - Typical Usage (Non-Developer Mode)
-
-
-
-### Commander Installation - Developer Mode
-
-This type of installation assumes you want to view/modify the Python source code (Compatible with Python 3.4+).
-
-1. Install Python3 from python.org
-
-2. Install virtualenv:
-
-```
-sudo pip3 install virtualenv
-```
-
-3. Create and activate the virtual environment for your keeper project:
-```
-cd /path/to/Commander
-virtualenv -p python3 venv
-source venv/bin/activate
-pip install -r requirements.txt
-pip install -e .
-```
-
-Keeper supports plugins for various 3rd party systems for password reset integration. Depending on the plugin, you will need to install the modules required. For example, to support our MySQL plugin:
-
-pip3 install PyMySQL
-Set up a Keeper account from https://keepersecurity.com if you don't already have one.
-
-Run Keeper by typing
-```
-keeper
-```
-
-To run the interactive shell, type:
-
-```
-keeper shell
-```
-
-See the [custom](https://github.com/Keeper-Security/Commander/tree/master/keepercommander/custom) folder for examples on creating your own custom scripts to interface with Keeper from your own source code.
-
 ### Installation - Linux and Mac
 
 If you do not have Python 3 installed already (check by trying to run `pip3` in the Terminal), you can install it from [python.org](https://www.python.org).
@@ -74,14 +31,7 @@ Install Keeper Commander with pip3:
 ```bash
 pip3 install keepercommander
 ```
-
 Important: Restart your terminal session after installation
-
-To start using Commander just type:
-
-```bash
-keeper shell
-```
 
 ### Installation - Windows 
 
@@ -97,15 +47,7 @@ Instructions:
 pip3 install keepercommander
 ```
 
-To start using Commander just type:
-
-```bash
-keeper shell
-```
-
-### Upgrade
-
-To upgrade Keeper Commander to the newest version, call pip3 install with --upgrade parameter:
+To upgrade the latest version:
 
 ```bash
 pip3 install --upgrade keepercommander
@@ -113,7 +55,30 @@ pip3 install --upgrade keepercommander
 
 Please do not upgrade a production system without validation in your test environment as commands and functionality is under rapid development.
 
-### Command-line interface
+### Installation - Developer Mode
+
+This type of installation assumes you want to view/modify the Python source code (Compatible with Python 3.4+).
+
+1. Install Python3 from python.org
+2. Install virtualenv:
+```
+sudo pip3 install virtualenv
+```
+3. Create and activate the virtual environment for your keeper project:
+
+```
+cd /path/to/Commander
+virtualenv -p python3 venv
+source venv/bin/activate
+pip install -r requirements.txt
+pip install -e .
+```
+
+Keeper supports plugins for various 3rd party systems for password reset integration. Depending on the plugin, you will need to also install the modules required by that plugin. For example, our MySQL plugin requires the PyMySQL module.
+
+See the [custom](https://github.com/Keeper-Security/Commander/tree/master/keepercommander/custom) folder for examples on creating your own custom scripts.
+
+### Command-line Usage
 
 Commander's command-line interface and interactive shell is a powerful and convenient way to access and control your Keeper vault and perform many administrative operations. To see all available commands, just type:
 
