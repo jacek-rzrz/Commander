@@ -1,38 +1,54 @@
 ![](https://raw.githubusercontent.com/Keeper-Security/Commander/master/keepercommander/images/commander_logo_512x205.png)
 
-[![Build Status](https://travis-ci.org/Keeper-Security/Commander.svg)](https://travis-ci.org/Keeper-Security/Commander)
-
 ----
 #### The Password Management SDK for IT Admins & Developers
 
-Keeper Commander is a command-line and SDK interface to [Keeper&reg; Password Manager](https://keepersecurity.com).  Keeper Commander is designed to perform targeted password rotations and eliminate the use of hardcoded passwords in your systems and software.  Commander will securely rotate passwords in your Keeper vault and then instantly push the changes to all users with privileged access to the password.  Using our connector [plugins](https://github.com/Keeper-Security/Commander/tree/master/keepercommander/plugins), Commander executes a strong password rotation directly to the target system (Unix Logins, Databases, Active Directory, network devices, etc...).
+Keeper Security develops the world's most downloaded password manager and encrypted digital vault with millions of individual customers and thousands of enterprise customers worldwide.  Keeper offers a zero-knowledge, cloud-based solution to consumers, families and businesses to protect and secure their most sensitive and private information. Keeper Password Manager is available on every mobile and desktop device. <a href="#about-keeper">Read more</a> about Keeper or visit the [Keeper Security](https://keepersecurity.com) website.
 
-Commander also has a command-line shell interface for accessing your Keeper vault, importing data and performing other actions from any Unix, Mac or Windows system.  Since Keeper Commander is an open source SDK and written in Python, it can be customized to meet your needs and integrated into your back-end systems.
+### Keeper Commander
 
-[Here's a Video](https://youtu.be/p50OKRiaxl8) demonstrating Commander.
+Keeper Commander is a command-line, interactive shell and SDK interface to [Keeper&reg; Password Manager](https://keepersecurity.com). Commander can be used to access and control your Keeper vault, rotate passwords and perform Keeper Enterprise administrative functions related to user onboarding and provisioning of vault records.
+
+In addition to vault and administrative functionality, Commander can be used to perform targeted password rotations, integrate password management into your backend systems and eliminate the use of hardcoded passwords. Using our connector [plugins](https://github.com/Keeper-Security/Commander/tree/master/keepercommander/plugins), Commander can execute a password rotation directly to any common system or service account such as Unix systems, SQL Databases, Active Directory, Amazon AWS, local Administator accounts, network devices, etc...
+
+Keeper Commander is an open source project written in Python, and it is under continuous development by the Keeper engineering team. As new features and capabilities are added to the Keeper platform, we add new commands and features to Commander.  If you need any assistance or require specific functionality, please contact ops@keepersecurity.com.
 
 ### Use Cases
 
-* Access passwords through a terminal or SSH session
-* Import or export vault records   
-* Add password records programatically to your Keeper vault
-* Eliminate hard-coded or plaintext passwords in back-end systems
-* Rotate passwords on shared accounts 
-* Perform password rotations on target systems
-* Authenticate with Yubikey and other 2FA methods
-* Schedule and automate rotations 
+* Access your Keeper vault through a command-line interface 
+* Perform bulk import and export of vault records 
+* Manage records, folders and shared folders
+* Customize integration into your backend systems 
+* Provision new Enterprise user accounts and shared folders
+* Rotate passwords on service accounts or other targets
+* Integrate Keeper into your existing backend systems 
+* Schedule and automate commands 
 
-![](https://raw.githubusercontent.com/Keeper-Security/Commander/master/keepercommander/images/keeper_intro.gif)
+### Developer Setup 
 
-Keeper Commander provides deep integration of privileged password management into back-end systems to securely access credentials, elevate permissions and rotate passwords. With Keeper Commander you can automate key security features on any platform.
+If you plan to write custom code, we recommend following the [developer setup instructions](https://github.com/Keeper-Security/Commander/tree/master/keepercommander).
 
-Changes made through Keeper Commander instantly propagate to the users who have access to that specific record.
+### Installation - Linux and Mac
 
-When you grant and revoke access or rotate a password, it instantly updates to users on their mobile and desktop devices. Control access to highly secure systems by rotating passwords and pushing those credentials to users - all within the Keeper ecosystem.
+If you do not have Python 3 installed already (check by trying to run `pip3` in the Terminal), you can install it from [python.org](https://www.python.org).
+
+Install Keeper Commander with pip3:
+
+```bash
+pip3 install keepercommander
+```
+
+Important: Restart your terminal session after installation
+
+To start using Commander just type:
+
+```bash
+keeper shell
+```
 
 ### Installation - Windows 
 
-Unless you're planning to modify code or build Python scripts, the quick and easy way to install Commander on Windows is using the [WinPython](https://winpython.github.io/) package.
+To use Commander on Windows we recommend installing the [WinPython](https://winpython.github.io/) package.
 
 Instructions:
 
@@ -50,20 +66,6 @@ To start using Commander just type:
 keeper shell
 ```
 
-### Installation - Mac and Linux OS
-
-If you do not have Python 3 installed already (check by trying to run `pip3` in the Terminal), you can install it by going to [python.org](https://www.python.org) and following the instructions).
-
-Note: Restart your terminal session after installation
-
-Install Keeper Commander with pip3:
-
-```bash
-pip3 install keepercommander
-```
-
-Note: Restart your terminal session after installation
-
 ### Upgrade
 
 To upgrade Keeper Commander to the newest version, call pip3 install with --upgrade parameter:
@@ -72,78 +74,67 @@ To upgrade Keeper Commander to the newest version, call pip3 install with --upgr
 pip3 install --upgrade keepercommander
 ```
 
-### Three ways to use Keeper Commander
+Please do not upgrade a production system without validation in your test environment as commands and functionality is under rapid development.
 
-1. From the command line or script
-2. As an interactive shell
-3. In your own Python program by importing the keepercommander package
+### Command-line interface
 
-### Command line usage
+Commander's command-line interface and interactive shell is a powerful and convenient way to access and control your Keeper vault and perform many administrative operations. To see all available commands, just type:
 
-The quickest way to look up records or get a password is through the Keeper command line interface.  The interactive shell mode is discussed in the next section. To see all available commands, just type:
 ```
 $ keeper
 ```
 
-The help screen displays as seen below.
-
 ```
-usage: /Users/skolupaev/PY/test/bin/keeper [--keeper-server SERVER]
-                                           [--keeper-user USER]
-                                           [--keeper-password PASSWORD]
-                                           [--version] [--config CONFIG]
-                                           [--debug]
-                                           [command] [options [options ...]]
-
-positional arguments:
-  command               Command
-  options               Options
+usage: keeper [--server SERVER] [--user USER] [--password PASSWORD]
+              [--version] [--config CONFIG] [--debug]
+              [command] [options [options ...]]
 
 optional arguments:
-  --keeper-server SERVER, -ks SERVER
-                        Host address. You can set KEEPER_SERVER environment
-                        variable instead.
-  --keeper-user USER, -ku USER
-                        Email address for the account. You can set KEEPER_USER
-                        environment variable instead.
-  --keeper-password PASSWORD, -kp PASSWORD
-                        Master password for the account. You can set
-                        KEEPER_PASSWORD environment variable instead.
+  --server SERVER, -ks SERVER
+                        Keeper Host address.
+  --user USER, -ku USER
+                        Email address for the account.
+  --password PASSWORD, -kp PASSWORD
+                        Master password for the account.
   --version             Display version
   --config CONFIG       Config file to use
   --debug               Turn on debug mode
 
 Commands:
-  list|l          ... Display all record UID/titles
-  get|g           ... Display specified Keeper record/folder/team
-  add|a           ... Add record
-  rm              ... Remove record
-  append-note|an  ... Append notes to existing record
-  list-sf|lsf     ... Display all shared folders
-  list-team|lt    ... Display all teams
-  cd              ... Change current folder
-  ls              ... List folder content
-  tree            ... Display folder structure
-  mkdir           ... Create folder
-  rmdir           ... Remove folder and its content
-  mv              ... Move record or folder
-  ln              ... Create a link between record or folder
-  rotate|r        ... Rotate Keeper record
-  import          ... Import data from local file to Keeper
-  export          ... Export data from Keeper to local file
-  create_user     ... Create Keeper User
-  shell           ... Use Keeper interactive shell
-  d               ... Download & decrypt data
-  c               ... Clear the screen
-  h               ... Show command history
-  q               ... Quit
+  list|l               ... Display all record UID/titles
+  get|g                ... Display specified Keeper record/folder/team
+  add|a                ... Add record
+  rm                   ... Remove record
+  append-note|an       ... Append notes to existing record
+  download-attachment  ... Download record attachments
+  list-sf|lsf          ... Display all shared folders
+  list-team|lt         ... Display all teams
+  cd                   ... Change current folder
+  ls                   ... List folder content
+  tree                 ... Display folder structure
+  mkdir                ... Create folder
+  rmdir                ... Remove folder and its content
+  mv                   ... Move record or folder
+  ln                   ... Create a link between record or folder
+  rotate|r             ... Rotate Keeper record
+  import               ... Import data from local file to Keeper
+  export               ... Export data from Keeper to local file
+  whoami               ... Information about logged in user
+  login                ... Login to Keeper
+  logout               ... Logout from Keeper
+  sync-down|d          ... Download & decrypt data
+  create_user          ... Create Keeper User
+  shell                ... Use Keeper interactive shell
+  c                    ... Clear the screen
+  h                    ... Show command history
+  q                    ... Quit
 
 Type 'command -h' to display help on command
 ```  
 
-Running most commands will require you to authenticate to Keeper and decrypt your vault.  Authentication requires your email address ("user"), master password ("password") and optionally your 2FA code.  You can type these parameters interactively in the terminal or you can store these parameters into a file called config.json.  You can also store the parameters in environmental variables.
+Running most commands will require you to authenticate to Keeper and decrypt your vault.  Authentication requires your email address ("user"), master password ("password") and your two factor code (if this is enabled on your account).  You can type the "user" and "password" parameters interactively in the terminal or you can store these parameters into a config file called config.json.  Your 2FA code is not stored by you directly in the config, however a 2FA token value will be stored automatically after successful authentication.
 
-Here's a basic "config.json" file which will prompt you for your Keeper master password upon every usage:
+Below is a basic "config.json" file which will save you the step of typing your email every time:
 
 ```
 {
@@ -157,11 +148,11 @@ Here's a basic "config.json" file which will prompt you for your Keeper master p
 }
 ```
 
-Any parameter that is not filled in will be prompted on the command line interactively. 
+Any parameter that is not filled in will be prompted on the command line interactively. More advanced usage of configuration files for automated commands is in the <a href="#scheduling--automation">Scheduling & Automation</a> section below.
 
-Instead of using a config.json file for "server", "user" and "password" options, you can also set environment variables `KEEPER_SERVER`, `KEEPER_USER` and `KEEPER_PASSWORD`. Server, user and password specified as options have priority over server, user and password settings specified in the configuration file.  
+### PBKDF2 note 
 
-More advanced usage of configuration files for automated commands is in the <a href="#scheduling--automation">Scheduling & Automation</a> section below.  Yubikey security key devices can also be used to authenticate as described <a href="#yubikey-support">here</a>.
+Keeper uses PBKDF2 to derive keys from your master password. By default, Keeper accounts are now set for 100,000 iterations which is very strong. However, this can make logging into your vault take longer depending on the device speed.  If logging in takes too long, consider reducing the iterations to 10,000 from the Keeper Web Vault or Desktop App.
 
 ### Example commands 
 
@@ -177,18 +168,14 @@ Searching for Capital.*One
 ---  ----------------------  -----------------------------------  ---------------------  --------------------------------
   1  LYwEGKAvkRbCRfaH2wQgnA  Capital One Example                  craiglurey             https://www.capitalone.com
 
-
                  UID: LYwEGKAvkRbCRfaH2wQgnA
-            Revision: 162196517
-              Folder: TESTING             
                Title: Capital One Example 
                Login: craiglurey          
             Password: xKLKd2hLc8vS1195RJaR
                  URL: https://www.capitalone.com
-                Link: https://keepersecurity.com/vault#detail/LYwEGKAvkRbCRfaH2wQgnA
 ```
 
-As seen here, the matching vault record is displayed on the screen.  Since the master password is not stored in any environmental variable or config file, you will be prompted to type in your master password. 
+As seen here, the matching vault record is displayed on the screen.  Since the master password is not stored in any config file, you will be prompted to type in your master password. 
 
 As another example, to list all of the record UIDs and record titles in your vault:
 
@@ -210,13 +197,11 @@ Syncing...
 Decrypted [63] Records
 
                  UID: LYwEGKAvkRbCRfaH2wQgnA
-            Revision: 162196517
               Folder: TESTING             
                Title: Capital One Example 
                Login: craiglurey          
             Password: xKLKd2hLc8vS1195RJaR
                  URL: https://www.capitalone.com
-                Link: https://keepersecurity.com/vault#detail/LYwEGKAvkRbCRfaH2wQgnA
 ```
 
 ### Interactive shell
@@ -225,56 +210,6 @@ To just authenticate a single time and run a series of commands, you can use Com
 ```bash
 keeper shell
 ```
-
-To see a list of supported commands, simply type '?':
-
-```
-My Vault> ?
-
-Commands:
-  list|l          ... Display all record UID/titles
-  get|g           ... Display specified Keeper record/folder/team
-  add|a           ... Add record
-  rm              ... Remove record
-  append-note|an  ... Append notes to existing record
-  list-sf|lsf     ... Display all shared folders
-  list-team|lt    ... Display all teams
-  cd              ... Change current folder
-  ls              ... List folder content
-  tree            ... Display folder structure
-  mkdir           ... Create folder
-  rmdir           ... Remove folder and its content
-  mv              ... Move record or folder
-  ln              ... Create a link between record or folder
-  rotate|r        ... Rotate Keeper record
-  import          ... Import data from local file to Keeper
-  export          ... Export data from Keeper to local file
-  create_user     ... Create Keeper User
-  shell           ... Use Keeper interactive shell
-  d               ... Download & decrypt data
-  c               ... Clear the screen
-  h               ... Show command history
-  q               ... Quit
-
-Type 'command -h' to display help on command
-
-```
-
-* d (download): Downloads all records from the account, decrypts the data key, private key, decrypts records and shared folders.
-
-* l (list): Displays the Record UID, Folder and Title for all stored records.
-
-* s (search): Same as list.
-
-* lsf (list shared folders): Displays a list of all Shared Folder UID and names 
-
-* lt (list teams): Displays a list of all Team UID and names 
-
-* g (get): Displays the full details for a specified Record UID, Shared Folder UID or Team UID.  For records, this will show the login, password, custom fields and other record-related information that you would normally see in your Keeper Vault.  For Shared Folders, this will display the records stored in the shared folder, user permissions and team permissions associated with the shared folder.  For Teams, this will display the team name and team permissions as specified in the Keeper Admin Console.
-
-* r (rotate): Rotates the password field of a specified Keeper record.  The new password generated is by default set to a very strong 64-byte ASCII-based string.  The previous password is also backed up and stored as a custom field in the record, saved with the timestamp of the change.
-
-The Record UID is a unique identifier for every record in your Keeper vault.  This is used for deep linking and also for password rotation as described below. The search/list/get commands can be used to look up the Record UID when setting up a password rotation scheduler.
 
 ### Deep linking to records (Web Vault Hyperlink)
 
@@ -314,7 +249,8 @@ In this case, Commander will start up using foo.json as the configuration.
 ### JSON Config file format
 
 ```
-server: do not change
+server: This can be set to the endpoint within Keeper's US or EU  the United States (AWS US-EAST) or AWS EU (EU-WEST-1) environments:
+   US: 
 user: the Keeper email address
 password: the Keeper master password
 debug: turn on verbose debugging output
@@ -325,34 +261,44 @@ mfa_token: two-factor token used to authenticate this Commander instance
 challenge: challenge phrase if you are using a Yubikey device 
 ```
 
-If you have turned on two-factor authentication on your Keeper account, you will be prompted the first time you run Commander to enter the two-factor code.  Once authenticated, Commander will update the mfa_type and mfa_token parameters in the config file.  This way, subsequent calls are authenticated without needing additional two-factor tokens.
-
-You may ask, why is the master password stored in the JSON configuration file?  It doesn't need to be. You can omit the password field from the JSON file, and you'll be prompted with the password interactively.  It is our recommendation to set up a Keeper account that is solely used for Commander interaction. Using Keeper's sharing features, share the records with the Commander account that will be rotated.  Set a strong master password (such as a long hash key) and turn on Two-Factor authentication on this Commander account.  Then store the account master password in the JSON file and do not use this account for any other operations. 
-
+If you have turned on two-factor authentication on your Keeper account, you will be prompted the first time you run Commander to enter the two-factor code.  Once authenticated, Commander will update the mfa_type and mfa_token parameters in the config file for you. This way, subsequent calls are authenticated without needing additional two-factor tokens.
 
 ### Importing Password Records into Keeper
 
 To import records into your vault, you can provide either JSON or tab-delimited file.
-If using a JSON file, make sure it's an a valid JSON array.  For example, here's a JSON array file with 2 records:
+If using a JSON file, make sure it's an a valid JSON array.  For example, here's a JSON import file with 2 records. The first record is added to a folder called "My Servers".  The second record is added to "My Servers" and also added to a shared folder called "Shared Servers".
 
 ```
 [{
     "title":"Dev Server",
-    "folder": "Servers",
+    "folders": [
+      {
+        "folder": "My Servers"
+      }
+    ],
     "login": "root",
     "password": "lk4j139sk4j",
     "login_url": "https://myserver.com",
     "notes": "These are some notes.",
-    "custom_fields": [{"Security Group":"Private"}]
+    "custom_fields": {"Security Group":"Private"}
 },
 {
     "title":"Prod Server",
-    "folder": "Servers",
+    "folders": [
+      {
+        "folder": "My Servers"
+      },
+      {
+       "shared_folder": "Shared Servers",
+       "can_edit": true,
+       "can_share": true
+      }
+    ],
     "login": "root",
     "password": "kj424094fsdjhfs4jf7h",
     "login_url": "https://myprodserver.com",
     "notes": "These are some notes.",
-    "custom_fields": [{"Security Group":"Public","IP Address":"12.45.67.8"}]
+    "custom_fields": {"Security Group":"Public","IP Address":"12.45.67.8"}
 }]
 ```
 
@@ -362,57 +308,7 @@ Here's the command to run:
 ```
 keeper import --format=json import.json
 ```
-<!---
-### Importing Shared Folders into Keeper
 
-To automatically create Shared Folders into your vault, you need to provide a JSON file in the format defined below..
-
-A shared folder is an object which contains Keeper records, default permissions, users and teams.  You must specify the name of the folder, the default permissions, which specific records to add, which users to add and which teams (if any) to add.  Records are defined by the Record UID.  Users are defined by their email address (note: the user must exist).  Teams are defined by the Team UID.  Records, teams and users must exist prior to creating the shared folder, or the command will fail.  Record UID and Team UID can be found using Commander ("list" command). Use a JSON validator if you get errors running this command.  Make sure it's an a valid JSON array.  For example, here's a JSON array file with one shared folder defined: 
-
-```
-    [{
-      "name":"My Shared Folder",
-      "default_can_edit": false,
-      "default_can_share": false,
-      "default_manage_records": false,
-      "default_manage_users": false,
-      "records":[
-        {
-          "record_uid":"YWRkcmVjb3JkICAgICAgIA",
-          "can_share":true,
-          "can_edit":true
-        }
-      ],
-      "users":[
-        {
-          "username":"somebody@company.com",
-          "manage_users":false,
-          "manage_records":false
-        },
-        {
-          "username":"me@company.com",
-          "manage_users":true,
-          "manage_records":true
-        }
-      ],
-      "teams":[
-        {
-          "team_uid":"yKz9nxpJS1yzDxBl-Akdog",
-          "manage_users":true,
-          "manage_records":true
-        }
-      ]
-    }]
-```
-
-Note that all users with access to the shared folder must be specified, even the user who is executing the API call.
-
-Here's the example command to run:
-
-```
-keeper create_sf my_shared_folder.json
-```
--->
 ### Scheduling & Automation
 
 If you want to fully automate Commander operations, such as rotating a password on a regular schedule, there are a few different ways to accomplish this.
@@ -606,6 +502,7 @@ Keeper's Features &amp; Benefits
 * AES-256 encryption
 * Zero-Knowledge security architecture
 * TRUSTe and SOC-2 Certified
+* GDPR Compliant 
 
 ### Keeper Website
 [https://keepersecurity.com](https://keepersecurity.com)
