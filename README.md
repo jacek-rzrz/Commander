@@ -36,7 +36,7 @@ Keeper Commander is an open source project written in Python, and it is under co
 2. Install Keeper Commander with pip3:
 
 ```bash
-pip3 install keepercommander
+$ pip3 install keepercommander
 ```
 
 Important: Restart your terminal session after installation
@@ -48,13 +48,13 @@ Important: Restart your terminal session after installation
 2. Install Keeper Commander with pip3:
 
 ```bash
-pip3 install keepercommander
+$ pip3 install keepercommander
 ```
 
 To upgrade:
 
 ```bash
-pip3 install --upgrade keepercommander
+$ pip3 install --upgrade keepercommander
 ```
 
 Please do not upgrade a production system without validation in your test environment as commands and functionality is under rapid development.
@@ -65,17 +65,17 @@ This type of installation assumes you want to view/modify the Python source code
 
 1. Install Python3 from python.org
 2. Install virtualenv:
-```
-sudo pip3 install virtualenv
+```bash
+$ sudo pip3 install virtualenv
 ```
 3. Create and activate the virtual environment for your keeper project:
 
-```
-cd /path/to/Commander
-virtualenv -p python3 venv
-source venv/bin/activate
-pip install -r requirements.txt
-pip install -e .
+```bash
+$ cd /path/to/Commander
+$ virtualenv -p python3 venv
+$ source venv/bin/activate
+$ pip install -r requirements.txt
+$ pip install -e .
 ```
 
 Keeper supports plugins for various 3rd party systems for password reset integration. Depending on the plugin, you will need to also install the modules required by that plugin. For example, our MySQL plugin requires the PyMySQL module.
@@ -86,12 +86,12 @@ See the [custom](https://github.com/Keeper-Security/Commander/tree/master/keeper
 
 Commander's command-line interface and interactive shell is a powerful and convenient way to access and control your Keeper vault and perform many administrative operations. To see all available commands, just type:
 
-```
+```bash
 $ keeper
 ```
 
 ### Interactive shell
-To run a series of commands and stay logged in, you can use Commander's linux-style interactive shell.
+To run a series of commands and stay logged in, you can use Commander's interactive shell.
 
 ```bash
 $ keeper shell
@@ -108,56 +108,63 @@ $ keeper shell
 Not logged in>
 ```
 
-### Optional command-line arguments
+### Configuration File
 
-* server
+By default, Keeper will look for a file called ```config.json``` in the current working directory and it will use this file for reading and writing session parameters. For example, if you login with two factor authentication, the device token is written to this file. The configuration file loaded can also be customized through the ```--config`` parameter. The config.json file can also be used to automate commands or to store login parameters.
 
-Leave this blank unless you are using a different endpoint.
+### Command line parameters 
 
-* user
-
-Keeper email address (username)
-
-* password
-
-Keeper master password
-
-* config
-
-Filename of the JSON config file to use
-
-* debug
-
-Turning debug "on" or "off" will generate logs and debug info for developers
-
-### Command / Feature Reference 
-
-usage: keeper [--server SERVER] [--user USER] [--password PASSWORD]
-              [--version] [--config CONFIG] [--debug]
-              [command] [options [options ...]]
-```  
-
-Running most commands will require you to authenticate to Keeper and decrypt your vault.  Authentication requires your email address ("user"), master password ("password") and your two factor code (if this is enabled on your account).  You can type the "user" and "password" parameters interactively in the terminal or you can store these parameters into a config file called config.json.  Your 2FA code is not stored by you directly in the config, however a 2FA token value will be stored automatically after successful authentication.
-
-Below is a basic "config.json" file which will save you the step of typing your email every time:
-
+```bash
+keeper [--server SERVER] [--user USER] [--password PASSWORD]
+       [--version] [--config CONFIG] [--debug]
+       [command] [options [options ...]]
 ```
+
+### JSON Config File parameters
+
+Below is a fully loaded config file. 
+
+```bash
 {
-    "user":"youremail@company.com",
-    "password":"",
-    "mfa_token":"",
-    "mfa_type":"",
+    "server":"https://keepersecurity.com/api/v2",
+    "user":"craig@company.com",
+    "password":"your_password_here",
+    "mfa_token":"filled_in_by_commander",
+    "mfa_type":"device_token",
     "debug":false,
     "plugins":[],
-    "commands":[]
+    "commands":[],
+    "timedelay":0,
 }
 ```
 
-Any parameter that is not filled in will be prompted on the command line interactively. More advanced usage of configuration files for automated commands is in the <a href="#scheduling--automation">Scheduling & Automation</a> section below.
+Notes:
 
-Keeper uses PBKDF2 to derive keys from your master password. By default, Keeper accounts are now set for 100,000 iterations which is very strong. However, this can make logging into your vault take longer depending on the device speed.  If logging in takes too long, consider reducing the iterations to 10,000 from the Keeper Web Vault or Desktop App.
+* ```server``` can be left blank and defaults to the United States data center. If your account is in the European data center then change the server domain from ```.com``` to ```.eu```.
+
+* ```mfa_token``` will be set by Commander automatically after successful two-factor authentication.
+
+* ```debug``` parameter can be set to ```true``` or ```false``` to enable detailed crypto and network logging.
+
+* ```plugins``` parameter determines which password rotation plugin will be loaded.  
+
+https://github.com/Keeper-Security/Commander/tree/master/keepercommander/plugins
+
+* ```commands``` parameter is a comma-separated list of Keeper commands to run.  For example:
+```"commands":["d", "r 3PMqasi9hohmyLWJkgxCWg"]``` will sync your vault then rotate a particular password.
+
+* ```timedelay``` parameter can be used to automatically run the specified commands every X seconds. For example:
+```"timedelay":600``` will run the commands every 10 minutes.
+
+* ```challenge``` parameter is the challenge phrase when using a Yubikey device to authenticate. 
+
+Commander supports the ability to authenticate a session with a connected Yubikey device instead of using a Master Password.  To configure Yubikey authentication, follow the [setup instructions](https://github.com/Keeper-Security/Commander/tree/master/keepercommander/yubikey).  You will end up using a challenge phrase to authenticate instead of the master password.
+
+* ```device_token_expiration``` can be set to ```true``` to expire 2FA device tokens after 30 days.
 
 ### Command reference
+
+Whether using the interactive shell, CLI or JSON config file, Keeper supports the following features specified by ```command``` 
 
 * list|l               ... Display all record UID/titles
 
@@ -216,54 +223,6 @@ Keeper uses PBKDF2 to derive keys from your master password. By default, Keeper 
 
 The Record UID that is displayed on password record output can be used for deep linking directly into the Keeper Web Vault only for privileged users. This Vault link can be stored and sent over unsecure channels because it only provides a reference to the record within your vault -- it does not provide access to the actual record content.  To access the content, you must still authenticate into the vault and decrypt the data.  The link is in the format `https://keepersecurity.com/vault#detail/XXXXXX` and you simply replace XXXXXX with the Record UID. Providing this link to another user does NOT initiate sharing.  To share a vault record, you must authenticate to your vault, open the record and click the "Share" feature.
 
-### Automating Commander 
-
-To automate the use of Commander, create a JSON file (let's call it config.json) and place the file in the working directory where you are invoking the shell commands.  If you don't provide a config file, Commander will just prompt you for the information interactively.
-
-Here's an example config.json file:
-
-```
-{
-    "user":"your_email_here",
-    "password":"your_password_here",
-    "debug":false,
-    "commands":[]
-}
-```
-
-All fields are optional.  You can also tell Commander which config file to use.  By default, we look at the config.json file.  
-
-Example 1: Simply access your vault interactively (if config.json is in the current folder, it will take precedence)
-
-```bash
-keeper shell
-```
-
-Example 2: Load up parameters from the specified JSON file
-
-```bash
-keeper --config=foo.json shell
-```
-
-In this case, Commander will start up using foo.json as the configuration.
-
-### JSON Config file format
-
-```
-server: This can be set to the endpoint within Keeper's US or EU  the United States (AWS US-EAST) or AWS EU (EU-WEST-1) environments:
-   US: 
-user: the Keeper email address
-password: the Keeper master password
-debug: turn on verbose debugging output
-commands: comma-separated list of commands to run
-timedelay: number of seconds to wait before running all commands again
-mfa_type: if multi-factor auth is used, this will be set to "device_token"
-mfa_token: two-factor token used to authenticate this Commander instance
-challenge: challenge phrase if you are using a Yubikey device 
-```
-
-If you have turned on two-factor authentication on your Keeper account, you will be prompted the first time you run Commander to enter the two-factor code.  Once authenticated, Commander will update the mfa_type and mfa_token parameters in the config file for you. This way, subsequent calls are authenticated without needing additional two-factor tokens.
-
 ### Importing Password Records into Keeper
 
 To import records into your vault, you can provide either JSON or tab-delimited file.
@@ -307,65 +266,8 @@ The format must be perfect JSON or it will fail.  The keys in each JSON hash mus
 Here's the command to run:
 
 ```
-keeper import --format=json import.json
+$ keeper import --format=json import.json
 ```
-
-### Scheduling & Automation
-
-If you want to fully automate Commander operations, such as rotating a password on a regular schedule, there are a few different ways to accomplish this.
-
-Using config.json file and **timedelay** setting, you tell Commander the time delay in seconds to wait and then reissue all commands.  This is the easiest way to schedule automated password resets.
-
-Below is an example:
-
-config.json:
-
-```
-{
-    "debug":false,
-    "user":"admin@company.com",
-    "password":"somereallystrongpassword",
-    "timedelay":600,
-    "commands":["d", "r 3PMqasi9hohmyLWJkgxCWg", "r tlCK0x1chKH8keW8-NOraA"]
-}
-```
-
-Terminal command:
-
-```
-keeper --config config.json shell
-```
-
-In this example, Commander would download and decrypt records, rotate 2 passwords (with Record UIDs specified), and then wait for 600 seconds (10 minutes) before issuing the commands again.  Also in this example, the master password is stored in the JSON file.  If you don't want to store a credential or Yubikey challenge phrase in the JSON config file, you can leave that out and you'll be prompted for the password on the interactive shell.  But in this scenario, you'll need to leave Commander running in a persistent terminal session.
-
-If you prefer not to keep a persistent terminal session active, you can also add Commander to a cron script (for Unix/Linux systems) or the launchctl daemon on Mac systems.  Below is an example of executing Commander from a Mac launchctl scheduler:
-
-### Two-Factor Authentication and Device Token
-
-If you have Two-Factor Authentication enabled on your Keeper account (highly recommended), Keeper Commander will prompt 
-you for the one-time passcode the first time you login.  After successfully logging in, you will be provided a device token. 
-This device token is automatically saved to the config file when you login interactively. 
-If you have multiple config files, you can just copy-paste this device token into your config.json file.  For example:
-
-```
-{
-    "debug":false,
-    "user":"email@company.com",
-    "password":"123456",
-    "mfa_token":"vFcl44TdjQcgTVfCMlUw0O9DIw8mOg8fJypGOlS_Rw0WfXbCD9iw",
-    "mfa_type":"device_token",
-    "device_token_expiration":true,
-    "commands":["d", "r 3PMqasi9hohmyLWJkgxCWg", "r tlCK0x1chKH8keW8-NOraA"]
-}
-```
-Note: If you want your device tokens to expire, set "device_token_expiration" to "true". If set, your device token will expire in 30 days.
-
-To activate Two-Factor Authentication on your Keeper account, login to the [Web App](https://keepersecurity.com/vault) 
-and visit the Settings screen.  Keeper supports Text Message, Google Authenticator, RSA SecurID and Duo Security methods.
-
-### Yubikey Support 
-
-Commander supports the ability to authenticate a session with a connected Yubikey device instead of using a Master Password.  To configure Yubikey authentication, follow the [setup instructions](https://github.com/Keeper-Security/Commander/tree/master/keepercommander/yubikey).  You will end up using a challenge phrase to authenticate instead of the master password.
 
 ### Targeted Password Rotations & Plugins 
 
@@ -395,13 +297,11 @@ Keeper is a zero-knowledge platform.  This means that the server does not have a
 
 When you create a Keeper account from our [web app](https://keepersecurity.com/vault) or [mobile/desktop app](https://keepersecurity.com/download), you are asked to create a Master Password and a security question.  The Keeper app creates your crypto keys, RSA keys and encryption parameters (iv, salt, iterations).  Your RSA private key is encrypted with your data key, and your data key is encrypted with your Master Password.  The encrypted version of your data key is stored in Keeper's Cloud Security Vault and provided to you after successful device authentication.
 
-When you login to Keeper on any device (or on Commander), your Master Password is used to derive a 256-bit PBKDF2 key.  This key is used to decrypt your data key.  The data key is used to decrypt individual record keys.  Finally, your record keys are then used to decrypt your stored vault information (e.g. your MySQL password).
+When you login to Keeper on any device (or on Commander), your Master Password is used to derive a 256-bit PBKDF2 key.  This key is used to decrypt your data key.  The data key is used to decrypt individual record keys.  Finally, your record keys are then used to decrypt your stored vault information.
 
 When storing information to your vault, Keeper stores and synchronizes the encrypted data.
 
 For added security, you can enable Two-Factor Authentication on your Keeper account via the [web app](https://keepersecurity.com/vault) settings screen.  When logging into Commander with Two-Factor Authentication turned on, you will be asked for a one time passcode.  After successful authentication, you will be provided with a device token that can be used for subsequent requests without having to re-authenticate.
-
-All of this cryptography is packaged and wrapped into a simple and easy-to-use interface.  Commander gives you the power to access, store and synchronize encrypted vault records with ease.
 
 To learn about Keeper's security, certifications and implementation details, visit the [Security Disclosure](https://keepersecurity.com/security.html) page on our website.
 
