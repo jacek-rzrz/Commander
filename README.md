@@ -110,7 +110,7 @@ Not logged in>
 
 ### Configuration File
 
-By default, Keeper will look for a file called ```config.json``` in the current working directory and it will use this file for reading and writing session parameters. For example, if you login with two factor authentication, the device token is written to this file. The configuration file loaded can also be customized through the ```--config`` parameter. The config.json file can also be used to automate commands or to store login parameters.
+By default, Keeper will look for a file called ```config.json``` in the current working directory and it will use this file for reading and writing session parameters. For example, if you login with two factor authentication, the device token is written to this file. The configuration file loaded can also be customized through the ```config``` parameter. The config file can also be used to automate and schedule commands.
 
 ### Command line parameters 
 
@@ -146,12 +146,10 @@ Notes:
 
 * ```debug``` parameter can be set to ```true``` or ```false``` to enable detailed crypto and network logging.
 
-* ```plugins``` parameter determines which password rotation plugin will be loaded.  
-
-https://github.com/Keeper-Security/Commander/tree/master/keepercommander/plugins
+* ```plugins``` parameter determines which password rotation plugin will be loaded. [Learn more](https://github.com/Keeper-Security/Commander/tree/master/keepercommander/plugins) about password rotation plugins for Commander.
 
 * ```commands``` parameter is a comma-separated list of Keeper commands to run.  For example:
-```"commands":["d", "r 3PMqasi9hohmyLWJkgxCWg"]``` will sync your vault then rotate a particular password.
+```"commands":["d", "r 3PMqasi9hohmyLWJkgxCWg"]``` will sync your vault then rotate the password on the specified record UID.
 
 * ```timedelay``` parameter can be used to automatically run the specified commands every X seconds. For example:
 ```"timedelay":600``` will run the commands every 10 minutes.
@@ -162,61 +160,65 @@ Commander supports the ability to authenticate a session with a connected Yubike
 
 * ```device_token_expiration``` can be set to ```true``` to expire 2FA device tokens after 30 days.
 
-### Command reference
+### Keeper Command reference
 
-Whether using the interactive shell, CLI or JSON config file, Keeper supports the following features specified by ```command``` 
+Whether using the interactive shell, CLI or JSON config file, Keeper supports the following features specified by ```command```.  Each command supports additional parameters and options.  To get help on a particular command, use the ```-h``` flag.
 
-* list|l               ... Display all record UID/titles
+* ```login``` Login to Keeper
 
-* get|g                ... Display specified Keeper record/folder/team
+* ```whoami``` Information about logged in user
 
-* add|a                ... Add record
+* ```logout``` Logout from Keeper
 
-* rm                   ... Remove record
+* ```shell``` Use Keeper interactive shell
 
-* append-note|an       ... Append notes to existing record
+* ```sync-down``` or ```d``` Download, sync and decrypt vault
 
-* download-attachment  ... Download record attachments
+* ```list``` or ```l``` List all records or search with a regular expression.
 
-* list-sf|lsf          ... Display all shared folders
+* ```ls``` List folder contents (try ```ls -l``` as well)
 
-* list-team|lt         ... Display all teams
+* ```tree``` Display entire folder structure as a tree
 
-* cd                   ... Change current folder
+* ```cd``` Change current folder
 
-* ls                   ... List folder content
+* ```get``` Retrieve and display specified Keeper Record/Folder/Team
 
-* tree                 ... Display folder structure
+* ```download-attachment``` Download all file attachments in specified record
 
-* mkdir                ... Create folder
+* ```list-sf``` or ```lsf``` Display all shared folders
 
-* rmdir                ... Remove folder and its content
+Record Modification Commands
 
-* mv                   ... Move record or folder
+* ```add``` Add a record to the vault
 
-* ln                   ... Create a link between record or folder
+* ```rm``` Remove record
 
-* rotate|r             ... Rotate Keeper record
+* ```append-note``` Append notes to existing record
 
-* import               ... Import data from local file to Keeper
+Folder Commands
 
-* export               ... Export data from Keeper to local file
+* ```mkdir``` Create folder
 
-* whoami               ... Information about logged in user
+* ```rmdir``` Remove folder and its content
 
-* login                ... Login to Keeper
+* ```mv``` Move record or folder
 
-* logout               ... Logout from Keeper
+* ```ln``` Create a link between record or folder
 
-* sync-down|d          ... Download & decrypt data
+Advanced Commands
 
-* create_user          ... Create Keeper User
+* ```rotate|r             ... Rotate Keeper record
 
-* shell                ... Use Keeper interactive shell
+* ```import``` Import data from local file to Keeper
 
-* c                    ... Clear the screen
+* ```export``` Export data from Keeper to local file
 
-* h                    ... Show command history
+Administrative Commands
+
+* ```list-team``` or ```lt``` Display all teams
+
+* ```create_user          ... Create Keeper User
 
 
 ### Deep linking to records (Web Vault Hyperlink)
