@@ -1,6 +1,14 @@
 ![](https://raw.githubusercontent.com/Keeper-Security/Commander/master/keepercommander/images/commander_logo_250x100.png)
 
 ----
+
+Jump to:
+* [Overview](#password-management-sdk-for-it-admins--developers)
+* [Use Cases](#use-cases)
+* [Installation - Linux and Mac](#installation---linux-and-mac)
+* [Installation - Windows](#installation---windows)
+* [Installation - Developer Mode](#installation---developer-mode)
+
 ### Password Management SDK for IT Admins & Developers
 
 Keeper Security develops the world's most downloaded password manager and encrypted digital vault with millions of individual customers and thousands of enterprise customers worldwide.  Keeper offers a zero-knowledge, cloud-based solution to consumers, families and businesses to protect and secure their most sensitive and private information. Keeper Password Manager is available on every mobile and desktop device. <a href="#about-keeper">Read more</a> about Keeper or visit the [Keeper Security](https://keepersecurity.com) website.
@@ -24,30 +32,26 @@ Keeper Commander is an open source project written in Python, and it is under co
 
 ### Installation - Linux and Mac
 
-If you do not have Python 3 installed already (check by trying to run `pip3` in the Terminal), you can install it from [python.org](https://www.python.org).
-
-Install Keeper Commander with pip3:
+1. Get Python 3 from [python.org](https://www.python.org).
+2. Install Keeper Commander with pip3:
 
 ```bash
 pip3 install keepercommander
 ```
+
 Important: Restart your terminal session after installation
 
 ### Installation - Windows 
 
-To use Commander on Windows we recommend installing the [WinPython](https://winpython.github.io/) package.
-
-Instructions:
-
 1. Download and install [WinPython](https://winpython.github.io/)
 2. From the install folder of WinPython, run the "WinPython Command Prompt" 
-3. Install Commander from the command prompt:
+2. Install Keeper Commander with pip3:
 
 ```bash
 pip3 install keepercommander
 ```
 
-To upgrade the latest version:
+To upgrade:
 
 ```bash
 pip3 install --upgrade keepercommander
@@ -86,52 +90,40 @@ Commander's command-line interface and interactive shell is a powerful and conve
 $ keeper
 ```
 
+### Interactive shell
+To run a series of commands and stay logged in, you can use Commander's linux-style interactive shell.
+
+```bash
+keeper shell
 ```
+
+### Optional command-line arguments
+
+* server
+
+Leave this blank unless you are using a different endpoint.
+
+* user
+
+Keeper email address (username)
+
+* password
+
+Keeper master password
+
+* config
+
+Filename of the JSON config file to use
+
+* debug
+
+Turning debug "on" or "off" will generate logs and debug info for developers
+
+### Command / Feature Reference 
+
 usage: keeper [--server SERVER] [--user USER] [--password PASSWORD]
               [--version] [--config CONFIG] [--debug]
               [command] [options [options ...]]
-
-optional arguments:
-  --server SERVER, -ks SERVER
-                        Keeper Host address.
-  --user USER, -ku USER
-                        Email address for the account.
-  --password PASSWORD, -kp PASSWORD
-                        Master password for the account.
-  --version             Display version
-  --config CONFIG       Config file to use
-  --debug               Turn on debug mode
-
-Commands:
-  list|l               ... Display all record UID/titles
-  get|g                ... Display specified Keeper record/folder/team
-  add|a                ... Add record
-  rm                   ... Remove record
-  append-note|an       ... Append notes to existing record
-  download-attachment  ... Download record attachments
-  list-sf|lsf          ... Display all shared folders
-  list-team|lt         ... Display all teams
-  cd                   ... Change current folder
-  ls                   ... List folder content
-  tree                 ... Display folder structure
-  mkdir                ... Create folder
-  rmdir                ... Remove folder and its content
-  mv                   ... Move record or folder
-  ln                   ... Create a link between record or folder
-  rotate|r             ... Rotate Keeper record
-  import               ... Import data from local file to Keeper
-  export               ... Export data from Keeper to local file
-  whoami               ... Information about logged in user
-  login                ... Login to Keeper
-  logout               ... Logout from Keeper
-  sync-down|d          ... Download & decrypt data
-  create_user          ... Create Keeper User
-  shell                ... Use Keeper interactive shell
-  c                    ... Clear the screen
-  h                    ... Show command history
-  q                    ... Quit
-
-Type 'command -h' to display help on command
 ```  
 
 Running most commands will require you to authenticate to Keeper and decrypt your vault.  Authentication requires your email address ("user"), master password ("password") and your two factor code (if this is enabled on your account).  You can type the "user" and "password" parameters interactively in the terminal or you can store these parameters into a config file called config.json.  Your 2FA code is not stored by you directly in the config, however a 2FA token value will be stored automatically after successful authentication.
@@ -152,66 +144,62 @@ Below is a basic "config.json" file which will save you the step of typing your 
 
 Any parameter that is not filled in will be prompted on the command line interactively. More advanced usage of configuration files for automated commands is in the <a href="#scheduling--automation">Scheduling & Automation</a> section below.
 
-### PBKDF2 note 
-
 Keeper uses PBKDF2 to derive keys from your master password. By default, Keeper accounts are now set for 100,000 iterations which is very strong. However, this can make logging into your vault take longer depending on the device speed.  If logging in takes too long, consider reducing the iterations to 10,000 from the Keeper Web Vault or Desktop App.
 
-### Example commands 
+### Command reference
 
-Here's an example on searching your vault with a regular expression.  Commander will display search results in a list with just record UID and title, and if there are less than 5 records it will display all of the record details.
+* list|l               ... Display all record UID/titles
 
-```
-clurey@home:~/test/ $ keeper list "Capital.*One"
-Password: <typed in>
-Syncing...
-Decrypted [63] Records
-Searching for Capital.*One
-  #  Record UID              Title                                Login                  URL
----  ----------------------  -----------------------------------  ---------------------  --------------------------------
-  1  LYwEGKAvkRbCRfaH2wQgnA  Capital One Example                  craiglurey             https://www.capitalone.com
+* get|g                ... Display specified Keeper record/folder/team
 
-                 UID: LYwEGKAvkRbCRfaH2wQgnA
-               Title: Capital One Example 
-               Login: craiglurey          
-            Password: xKLKd2hLc8vS1195RJaR
-                 URL: https://www.capitalone.com
-```
+* add|a                ... Add record
 
-As seen here, the matching vault record is displayed on the screen.  Since the master password is not stored in any config file, you will be prompted to type in your master password. 
+* rm                   ... Remove record
 
-As another example, to list all of the record UIDs and record titles in your vault:
+* append-note|an       ... Append notes to existing record
 
-```
-clurey@home:~/test/ $ keeper list 
+* download-attachment  ... Download record attachments
 
-1  7T13cQ6NQACZaT-7FXQsfg  Case File #25
-2  2uSii52DF5ny1K8CEZoj8g  Confidential Files
-3  6Z0uci6wesloF4YxtRUxzQ  Medical Recs
+* list-sf|lsf          ... Display all shared folders
 
-```
+* list-team|lt         ... Display all teams
 
-To view a specific record, just use the record UID like this:
- 
-```
-clurey@home:~/test/ $ keeper get LYwEGKAvkRbCRfaH2wQgnA
-Password: <typed in>
-Syncing...
-Decrypted [63] Records
+* cd                   ... Change current folder
 
-                 UID: LYwEGKAvkRbCRfaH2wQgnA
-              Folder: TESTING             
-               Title: Capital One Example 
-               Login: craiglurey          
-            Password: xKLKd2hLc8vS1195RJaR
-                 URL: https://www.capitalone.com
-```
+* ls                   ... List folder content
 
-### Interactive shell
-To just authenticate a single time and run a series of commands, you can use Commander's interactive shell.  Invoke shell by typing
+* tree                 ... Display folder structure
 
-```bash
-keeper shell
-```
+* mkdir                ... Create folder
+
+* rmdir                ... Remove folder and its content
+
+* mv                   ... Move record or folder
+
+* ln                   ... Create a link between record or folder
+
+* rotate|r             ... Rotate Keeper record
+
+* import               ... Import data from local file to Keeper
+
+* export               ... Export data from Keeper to local file
+
+* whoami               ... Information about logged in user
+
+* login                ... Login to Keeper
+
+* logout               ... Logout from Keeper
+
+* sync-down|d          ... Download & decrypt data
+
+* create_user          ... Create Keeper User
+
+* shell                ... Use Keeper interactive shell
+
+* c                    ... Clear the screen
+
+* h                    ... Show command history
+
 
 ### Deep linking to records (Web Vault Hyperlink)
 
@@ -341,76 +329,6 @@ In this example, Commander would download and decrypt records, rotate 2 password
 
 If you prefer not to keep a persistent terminal session active, you can also add Commander to a cron script (for Unix/Linux systems) or the launchctl daemon on Mac systems.  Below is an example of executing Commander from a Mac launchctl scheduler:
 
-### Setting up Keeper Commander to run via scheduler on a Mac
-
-1. Create LaunchAgents folder if not there already:
-```
-mkdir -p ~/Library/LaunchAgents
-```
-
-2. Create a new file representing this process
-
-```
-vi ~/Library/LaunchAgents/com.keeper.commander.plist
-```
-
-In the file, add something like this:
-```
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>Label</key>
-    <string>com.keeper.commander.rotation_test</string>
-    <key>ProgramArguments</key>
-    <array>
-        <string>/Path/to/folder/my_script.sh</string>
-    </array>
-    <key>StartInterval</key>
-    <integer>600</integer>
-    <key>WorkingDirectory</key>
-    <string>/Path/to/folder</string>
-    <key>StandardOutPath</key>
-    <string>/Path/to/folder/output.log</string>
-    <key>StandardErrorPath</key>
-    <string>/Path/to/folder/output.err</string>
-</dict>
-</plist>
-```
-
-Note: replace /Path/to/folder with the path to your working directory
-and replace 600 with the number of seconds between runs.
- 
-3.  In /Path/to/folder/ create a script my_script.sh like this:
-
-```
-vi my_script.sh
-```
-
-Add the following lines to the file:
-
-```
-export LANG=en_US.UTF-8
-say starting Keeper
-MYLOGLINE="`date +"%b %d %Y %H:%M"` $0:"
-echo "$MYLOGLINE Executing Keeper"
-/Library/Frameworks/Python.framework/Versions/3.5/bin/keeper --config config.json shell
-say rotation complete
-```
-
-Change the permissions to executable
-```
-chmod +x my_script.sh
-```
-
-4. Activate the process 
-
-```
-launchctl unload ~/Library/LaunchAgents/com.keeper.commander.plist
-launchctl load -w ~/Library/LaunchAgents/com.keeper.commander.plist
-```
- 
-Based on this example, Keeper Commander will execute the commands specified in config.json every 600 seconds.
-
 ### Two-Factor Authentication and Device Token
 
 If you have Two-Factor Authentication enabled on your Keeper account (highly recommended), Keeper Commander will prompt 
@@ -433,7 +351,6 @@ Note: If you want your device tokens to expire, set "device_token_expiration" to
 
 To activate Two-Factor Authentication on your Keeper account, login to the [Web App](https://keepersecurity.com/vault) 
 and visit the Settings screen.  Keeper supports Text Message, Google Authenticator, RSA SecurID and Duo Security methods.
-
 
 ### Yubikey Support 
 
