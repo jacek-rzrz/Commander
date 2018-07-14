@@ -188,6 +188,10 @@ Whether using the interactive shell, CLI or JSON config file, Keeper supports th
 
 * ```list-sf``` or ```lsf``` Display all shared folders
 
+* ```create_user``` Create Keeper vault account (free user)
+
+* ```list-team``` or ```lt``` Display all teams
+
 Record Modification Commands
 
 * ```add``` Add a record to the vault
@@ -206,20 +210,63 @@ Folder Commands
 
 * ```ln``` Create a link between record or folder
 
-Advanced Commands
+Password Rotation Commands
 
-* ```rotate|r             ... Rotate Keeper record
+* ```rotate``` or ```r``` Rotate password in record
 
-* ```import``` Import data from local file to Keeper
+Import and Export
 
-* ```export``` Export data from Keeper to local file
+* ```import``` Import data from local file to Keeper (JSON, CSV, Keepass)
 
-Administrative Commands
+* ```export``` Export data from Keeper to local file (JSON, CSV)
 
-* ```list-team``` or ```lt``` Display all teams
+* ```export_all``` Export all data and attachments in .zip format (Coming Soon!)
 
-* ```create_user          ... Create Keeper User
+Individual Share Commands (**Coming Soon**)
 
+* ```shared_record_grant``` Grand access to an individual record to a user
+
+* ```shared_record_revoke``` Revoke access to a shared record 
+
+* ```shared_record_update``` Change permission of a shared record 
+
+* ```shared_record_transfer``` Transfer individual record ownership 
+
+Shared Folder Commands (**Coming Soon**)
+
+* ```shared_folder_add_user``` Add a user to a shared folder
+
+* ```shared_folder_grant_team``` Grant team access to a shared folder
+
+* ```shared_folder_grant_user``` Grant user access to a shared folder
+
+* ```shared_folder_revoke_team``` Revoke a team to a shared folder
+
+* ```shared_folder_revoke_user``` Revoke a user from a shared folder
+
+* ```shared_folder_update_user``` Revoke a user from a shared folder
+
+* ```shared_folder_update_team``` Revoke a user from a shared folder
+
+* ```shared_folder_settings``` Set default folder settings of a shared folder
+
+Enterprise Console Commands (**Coming Soon**)
+
+* ```enterprise_user_add``` Invite a user to the Enterprise 
+
+* ```enterprise_user_lock``` Lock user account 
+
+* ```resend_enterprise_invite``` Resend enterprise invite
+
+* ```set_master_password_expire``` Expire a user's master password
+
+* ```role_user_add``` Add a user to a role
+
+* ```role_user_remove``` Remove a user from a role 
+
+* ```team_add``` Create a new team
+
+* ```team_enterprise_user_add``` Add a user to a team
 
 ### Deep linking to records (Web Vault Hyperlink)
 
