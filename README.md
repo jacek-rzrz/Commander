@@ -5,9 +5,9 @@
 Jump to:
 * [Overview](#password-management-sdk-for-it-admins--developers)
 * [Use Cases](#use-cases)
-* [Installation - Linux and Mac](#installation---linux-and-mac)
-* [Installation - Windows](#installation---windows)
-* [Installation - Developer Mode](#installation---developer-mode)
+* [Installation](#installation---linux-and-mac)
+* [Developer Setup](#installation---developer-mode)
+* [Keeper Command Reference](#keeper-command-reference)
 
 ### Password Management SDK for IT Admins & Developers
 
@@ -59,7 +59,7 @@ $ pip3 install --upgrade keepercommander
 
 Please do not upgrade a production system without validation in your test environment as commands and functionality is under rapid development.
 
-### Installation - Developer Mode
+### Installation - For Python Developers
 
 This type of installation assumes you want to view/modify the Python source code (Compatible with Python 3.4+).
 
@@ -91,7 +91,7 @@ $ keeper
 ```
 
 ### Interactive shell
-To run a series of commands and stay logged in, you can use Commander's interactive shell.
+To run a series of commands and stay logged in, you will enjoy using Commander's interactive shell.
 
 ```bash
 $ keeper shell
@@ -104,23 +104,174 @@ $ keeper shell
 
  password manager & digital vault
 
+Logging in...
+Syncing...
+Decrypted [400] Records
 
-Not logged in>
+My Vault>
 ```
 
-### Configuration File
+Type ```h``` to display all commands and help information.
 
-By default, Keeper will look for a file called ```config.json``` in the current working directory and it will use this file for reading and writing session parameters. For example, if you login with two factor authentication, the device token is written to this file. The configuration file loaded can also be customized through the ```config``` parameter. The config file can also be used to automate and schedule commands.
+### Keeper Command Reference
 
-### Command line parameters 
+Whether using the interactive shell, CLI or JSON config file, Keeper supports the following features specified by ```command```.  Each command supports additional parameters and options.  To get help on a particular command, use the ```-h``` flag.
+
+Basic Vault Commands
+
+* ```login``` Login to Keeper
+
+* ```whoami``` Information about logged in user
+
+* ```logout``` Logout from Keeper
+
+* ```shell``` Use Keeper interactive shell
+
+* ```sync-down``` or ```d``` Download, sync and decrypt vault
+
+* ```list``` or ```l``` List all records or search with a regular expression.
+
+* ```ls``` List folder contents (try ```ls -l``` as well)
+
+* ```tree``` Display entire folder structure as a tree
+
+* ```cd``` Change current folder
+
+* ```get``` Retrieve and display specified Keeper Record/Folder/Team
+
+* ```download-attachment``` Download all file attachments in specified record
+
+* ```list-sf``` or ```lsf``` Display all shared folders
+
+* ```create_user``` Create Keeper vault account (free user)
+
+* ```list-team``` or ```lt``` Display all teams
+
+Record Management Commands
+
+* ```add``` Add a record to the vault
+
+* ```rm``` Remove record
+
+* ```append-note``` Append notes to existing record
+
+Folder Management Commands
+
+* ```mkdir``` Create folder
+
+* ```rmdir``` Remove folder and its content
+
+* ```mv``` Move record or folder
+
+* ```ln``` Create a link between record or folder
+
+Password Rotation Commands
+
+* ```rotate``` or ```r``` Rotate password in record
+
+Import and Export Commands
+
+* ```import``` Import data from local file to Keeper (JSON, CSV, Keepass)
+
+* ```export``` Export data from Keeper to local file (JSON, CSV)
+
+* ```export_all``` Export all data and attachments in .zip format (Coming Soon!)
+
+Individual Sharing Commands (**Coming Soon**)
+
+* ```shared_record_grant``` Grand access to an individual record to a user
+
+* ```shared_record_revoke``` Revoke access to a shared record 
+
+* ```shared_record_update``` Change permission of a shared record 
+
+* ```shared_record_transfer``` Transfer individual record ownership 
+
+Shared Folder Management Commands (**Coming Soon**)
+
+* ```shared_folder_add_user``` Add a user to a shared folder
+
+* ```shared_folder_grant_team``` Grant team access to a shared folder
+
+* ```shared_folder_grant_user``` Grant user access to a shared folder
+
+* ```shared_folder_revoke_team``` Revoke a team to a shared folder
+
+* ```shared_folder_revoke_user``` Revoke a user from a shared folder
+
+* ```shared_folder_update_user``` Revoke a user from a shared folder
+
+* ```shared_folder_update_team``` Revoke a user from a shared folder
+
+* ```shared_folder_settings``` Set default folder settings of a shared folder
+
+Enterprise Console Management Commands (**Coming Soon**)
+
+* ```enterprise_user_add``` Invite a user to the Enterprise 
+
+* ```enterprise_user_lock``` Lock user account 
+
+* ```resend_enterprise_invite``` Resend enterprise invite
+
+* ```set_master_password_expire``` Expire a user's master password
+
+* ```role_user_add``` Add a user to a role
+
+* ```role_user_remove``` Remove a user from a role 
+
+* ```team_add``` Create a new team
+
+* ```team_enterprise_user_add``` Add a user to a team
+
+### Importing Bulk Data into Keeper
+
+To import records into your vault, use the ```import``` command.  you can provide either JSON or tab-delimited file.
+If using a JSON file, make sure it's an a valid JSON array.  For example, here's a JSON import file with 2 records. The first record is added to a folder called "My Servers".  The second record is added to "My Servers" and also added to a shared folder called "Shared Servers".
+
+```
+[{
+    "title":"Dev Server",
+    "folders": [
+      {
+        "folder": "My Servers"
+      }
+    ],
+    "login": "root",
+    "password": "lk4j139sk4j",
+    "login_url": "https://myserver.com",
+    "notes": "These are some notes.",
+    "custom_fields": {"Security Group":"Private"}
+},
+{
+    "title":"Prod Server",
+    "folders": [
+      {
+        "folder": "My Servers"
+      },
+      {
+       "shared_folder": "Shared Servers",
+       "can_edit": true,
+       "can_share": true
+      }
+    ],
+    "login": "root",
+    "password": "kj424094fsdjhfs4jf7h",
+    "login_url": "https://myprodserver.com",
+    "notes": "These are some notes.",
+    "custom_fields": {"Security Group":"Public","IP Address":"12.45.67.8"}
+}]
+```
+
+The format must be perfect JSON or it will fail.  The keys in each JSON hash must be present.  Use a JSON validator if you get errors running this.
+Here's the command-line  to run:
 
 ```bash
-keeper [--server SERVER] [--user USER] [--password PASSWORD]
-       [--version] [--config CONFIG] [--debug]
-       [command] [options [options ...]]
+$ keeper import --format=json import.json
 ```
 
-### JSON Config File parameters
+### Advanced Configuration File
+
+By default, Keeper will look for a file called ```config.json``` in the current working directory and it will use this file for reading and writing session parameters. For example, if you login with two factor authentication, the device token is written to this file. The configuration file loaded can also be customized through the ```config``` parameter. The config file can also be used to automate and schedule commands.
 
 Below is a fully loaded config file. 
 
@@ -160,163 +311,6 @@ Commander supports the ability to authenticate a session with a connected Yubike
 
 * ```device_token_expiration``` can be set to ```true``` to expire 2FA device tokens after 30 days.
 
-### Keeper Command reference
-
-Whether using the interactive shell, CLI or JSON config file, Keeper supports the following features specified by ```command```.  Each command supports additional parameters and options.  To get help on a particular command, use the ```-h``` flag.
-
-* ```login``` Login to Keeper
-
-* ```whoami``` Information about logged in user
-
-* ```logout``` Logout from Keeper
-
-* ```shell``` Use Keeper interactive shell
-
-* ```sync-down``` or ```d``` Download, sync and decrypt vault
-
-* ```list``` or ```l``` List all records or search with a regular expression.
-
-* ```ls``` List folder contents (try ```ls -l``` as well)
-
-* ```tree``` Display entire folder structure as a tree
-
-* ```cd``` Change current folder
-
-* ```get``` Retrieve and display specified Keeper Record/Folder/Team
-
-* ```download-attachment``` Download all file attachments in specified record
-
-* ```list-sf``` or ```lsf``` Display all shared folders
-
-* ```create_user``` Create Keeper vault account (free user)
-
-* ```list-team``` or ```lt``` Display all teams
-
-Record Modification Commands
-
-* ```add``` Add a record to the vault
-
-* ```rm``` Remove record
-
-* ```append-note``` Append notes to existing record
-
-Folder Commands
-
-* ```mkdir``` Create folder
-
-* ```rmdir``` Remove folder and its content
-
-* ```mv``` Move record or folder
-
-* ```ln``` Create a link between record or folder
-
-Password Rotation Commands
-
-* ```rotate``` or ```r``` Rotate password in record
-
-Import and Export
-
-* ```import``` Import data from local file to Keeper (JSON, CSV, Keepass)
-
-* ```export``` Export data from Keeper to local file (JSON, CSV)
-
-* ```export_all``` Export all data and attachments in .zip format (Coming Soon!)
-
-Individual Share Commands (**Coming Soon**)
-
-* ```shared_record_grant``` Grand access to an individual record to a user
-
-* ```shared_record_revoke``` Revoke access to a shared record 
-
-* ```shared_record_update``` Change permission of a shared record 
-
-* ```shared_record_transfer``` Transfer individual record ownership 
-
-Shared Folder Commands (**Coming Soon**)
-
-* ```shared_folder_add_user``` Add a user to a shared folder
-
-* ```shared_folder_grant_team``` Grant team access to a shared folder
-
-* ```shared_folder_grant_user``` Grant user access to a shared folder
-
-* ```shared_folder_revoke_team``` Revoke a team to a shared folder
-
-* ```shared_folder_revoke_user``` Revoke a user from a shared folder
-
-* ```shared_folder_update_user``` Revoke a user from a shared folder
-
-* ```shared_folder_update_team``` Revoke a user from a shared folder
-
-* ```shared_folder_settings``` Set default folder settings of a shared folder
-
-Enterprise Console Commands (**Coming Soon**)
-
-* ```enterprise_user_add``` Invite a user to the Enterprise 
-
-* ```enterprise_user_lock``` Lock user account 
-
-* ```resend_enterprise_invite``` Resend enterprise invite
-
-* ```set_master_password_expire``` Expire a user's master password
-
-* ```role_user_add``` Add a user to a role
-
-* ```role_user_remove``` Remove a user from a role 
-
-* ```team_add``` Create a new team
-
-* ```team_enterprise_user_add``` Add a user to a team
-
-### Deep linking to records (Web Vault Hyperlink)
-
-The Record UID that is displayed on password record output can be used for deep linking directly into the Keeper Web Vault only for privileged users. This Vault link can be stored and sent over unsecure channels because it only provides a reference to the record within your vault -- it does not provide access to the actual record content.  To access the content, you must still authenticate into the vault and decrypt the data.  The link is in the format `https://keepersecurity.com/vault#detail/XXXXXX` and you simply replace XXXXXX with the Record UID. Providing this link to another user does NOT initiate sharing.  To share a vault record, you must authenticate to your vault, open the record and click the "Share" feature.
-
-### Importing Password Records into Keeper
-
-To import records into your vault, you can provide either JSON or tab-delimited file.
-If using a JSON file, make sure it's an a valid JSON array.  For example, here's a JSON import file with 2 records. The first record is added to a folder called "My Servers".  The second record is added to "My Servers" and also added to a shared folder called "Shared Servers".
-
-```
-[{
-    "title":"Dev Server",
-    "folders": [
-      {
-        "folder": "My Servers"
-      }
-    ],
-    "login": "root",
-    "password": "lk4j139sk4j",
-    "login_url": "https://myserver.com",
-    "notes": "These are some notes.",
-    "custom_fields": {"Security Group":"Private"}
-},
-{
-    "title":"Prod Server",
-    "folders": [
-      {
-        "folder": "My Servers"
-      },
-      {
-       "shared_folder": "Shared Servers",
-       "can_edit": true,
-       "can_share": true
-      }
-    ],
-    "login": "root",
-    "password": "kj424094fsdjhfs4jf7h",
-    "login_url": "https://myprodserver.com",
-    "notes": "These are some notes.",
-    "custom_fields": {"Security Group":"Public","IP Address":"12.45.67.8"}
-}]
-```
-
-The format must be perfect JSON or it will fail.  The keys in each JSON hash must be present.  Use a JSON validator if you get errors running this.
-Here's the command to run:
-
-```
-$ keeper import --format=json import.json
-```
 
 ### Targeted Password Rotations & Plugins 
 
@@ -337,8 +331,10 @@ When a plugin is specified in a record, Commander will search in the plugins/ fo
 
 Check out the [plugins folder](https://github.com/Keeper-Security/Commander/tree/master/keepercommander/plugins) for all of the available plugins.  Keeper's team is expanding the number of plugins on an ongoing basis. If you need a particular plugin created, just let us know.
 
-### Support 
-We're here to help.  If you need help integrating Keeper into your environment, contact us at ops@keepersecurity.com.
+### Deep linking to records (Web Vault Hyperlink)
+
+The Record UID that is displayed on password record output can be used for deep linking directly into the Keeper Web Vault only for privileged users. This Vault link can be stored and sent over unsecure channels because it only provides a reference to the record within your vault -- it does not provide access to the actual record content.  To access the content, you must still authenticate into the vault and decrypt the data.  The link is in the format `https://keepersecurity.com/vault#detail/XXXXXX` and you simply replace XXXXXX with the Record UID. Providing this link to another user does NOT initiate sharing.  To share a vault record, you must authenticate to your vault, open the record and click the "Share" feature.
+
 
 ### About Our Security
 
@@ -431,3 +427,6 @@ Keeper is free for local password management on your device.  Premium subscripti
 
 [Enterprise Admin Console](https://keepersecurity.com/console)
 
+### Support 
+
+We're here to help.  If you need help integrating Keeper into your environment, contact us at ops@keepersecurity.com.
