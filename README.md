@@ -94,7 +94,18 @@ $ keeper
 To run a series of commands and stay logged in, you can use Commander's linux-style interactive shell.
 
 ```bash
-keeper shell
+$ keeper shell
+
+  _  __
+ | |/ /___ ___ _ __  ___ _ _
+ | ' </ -_) -_) '_ \/ -_) '_|
+ |_|\_\___\___| .__/\___|_|
+              |_|
+
+ password manager & digital vault
+
+
+Not logged in>
 ```
 
 ### Optional command-line arguments
