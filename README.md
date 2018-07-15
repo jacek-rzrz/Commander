@@ -51,7 +51,7 @@ Important: Restart your terminal session after installation
 $ pip3 install keepercommander
 ```
 
-To upgrade:
+### Upgrading to Latest Code
 
 ```bash
 $ pip3 install --upgrade keepercommander
@@ -59,16 +59,17 @@ $ pip3 install --upgrade keepercommander
 
 Please do not upgrade a production system without validation in your test environment as commands and functionality is under rapid development.
 
-### Installation - For Python Developers
+### Developer Environment Setup
 
 This type of installation assumes you want to view/modify the Python source code (Compatible with Python 3.4+).
 
-1. Install Python3 from python.org
-2. Install virtualenv:
+1. Clone/Download the Commander repository 
+2. Install Python3 from python.org
+3. Install virtualenv:
 ```bash
 $ sudo pip3 install virtualenv
 ```
-3. Create and activate the virtual environment for your keeper project:
+4. Create and activate the virtual environment for your keeper project:
 
 ```bash
 $ cd /path/to/Commander
@@ -88,6 +89,25 @@ Commander's command-line interface and interactive shell is a powerful and conve
 
 ```bash
 $ keeper
+
+usage: keeper [--server SERVER] [--user USER] [--password PASSWORD]
+              [--version] [--config CONFIG] [--debug]
+              [command] [options [options ...]]
+
+positional arguments:
+  command               Command
+  options               Options
+
+optional arguments:
+  --server SERVER, -ks SERVER
+                        Keeper Host address.
+  --user USER, -ku USER
+                        Email address for the account.
+  --password PASSWORD, -kp PASSWORD
+                        Master password for the account.
+  --version             Display version
+  --config CONFIG       Config file to use
+  --debug               Turn on debug mode
 ```
 
 ### Interactive shell
@@ -117,7 +137,7 @@ Type ```h``` to display all commands and help information.
 
 Whether using the interactive shell, CLI or JSON config file, Keeper supports the following features specified by ```command```.  Each command supports additional parameters and options.  To get help on a particular command, use the ```-h``` flag.
 
-Basic Vault Commands
+**Basic Vault Commands**
 
 * ```login``` Login to Keeper
 
@@ -147,7 +167,7 @@ Basic Vault Commands
 
 * ```list-team``` or ```lt``` Display all teams
 
-Record Management Commands
+**Record Management Commands**
 
 * ```add``` Add a record to the vault
 
@@ -155,7 +175,7 @@ Record Management Commands
 
 * ```append-note``` Append notes to existing record
 
-Folder Management Commands
+**Folder Management Commands**
 
 * ```mkdir``` Create folder
 
@@ -165,11 +185,11 @@ Folder Management Commands
 
 * ```ln``` Create a link between record or folder
 
-Password Rotation Commands
+**Password Rotation Commands**
 
 * ```rotate``` or ```r``` Rotate password in record
 
-Import and Export Commands
+**Import and Export Commands**
 
 * ```import``` Import data from local file to Keeper (JSON, CSV, Keepass)
 
@@ -177,7 +197,7 @@ Import and Export Commands
 
 * ```export_all``` Export all data and attachments in .zip format (Coming Soon!)
 
-Individual Sharing Commands (**Coming Soon**)
+**Individual Sharing Commands (Coming Soon)**
 
 * ```shared_record_grant``` Grand access to an individual record to a user
 
@@ -187,7 +207,9 @@ Individual Sharing Commands (**Coming Soon**)
 
 * ```shared_record_transfer``` Transfer individual record ownership 
 
-Shared Folder Management Commands (**Coming Soon**)
+**Shared Folder Management Commands (Coming Soon)**
+
+* ```shared_folder_settings``` Set default folder settings of a shared folder
 
 * ```shared_folder_add_user``` Add a user to a shared folder
 
@@ -195,17 +217,15 @@ Shared Folder Management Commands (**Coming Soon**)
 
 * ```shared_folder_grant_user``` Grant user access to a shared folder
 
-* ```shared_folder_revoke_team``` Revoke a team to a shared folder
+* ```shared_folder_revoke_team``` Revoke a team from a shared folder
 
 * ```shared_folder_revoke_user``` Revoke a user from a shared folder
 
-* ```shared_folder_update_user``` Revoke a user from a shared folder
+* ```shared_folder_update_user``` Update user permission on shared folder
 
-* ```shared_folder_update_team``` Revoke a user from a shared folder
+* ```shared_folder_update_team``` Update team permission on shared folder
 
-* ```shared_folder_settings``` Set default folder settings of a shared folder
-
-Enterprise Console Management Commands (**Coming Soon**)
+**Enterprise Console Management Commands (Coming Soon)**
 
 * ```enterprise_user_add``` Invite a user to the Enterprise 
 
@@ -223,12 +243,14 @@ Enterprise Console Management Commands (**Coming Soon**)
 
 * ```team_enterprise_user_add``` Add a user to a team
 
-### Importing Bulk Data into Keeper
+### Importing Records into Keeper
 
-To import records into your vault, use the ```import``` command.  you can provide either JSON or tab-delimited file.
+To import records into your vault, use the ```import``` command.  you can import from JSON, csv-delimited file or an encrypted keepass file.
 If using a JSON file, make sure it's an a valid JSON array.  For example, here's a JSON import file with 2 records. The first record is added to a folder called "My Servers".  The second record is added to "My Servers" and also added to a shared folder called "Shared Servers".
 
-```
+**JSON Record Import**
+
+```bash
 [{
     "title":"Dev Server",
     "folders": [
@@ -263,11 +285,12 @@ If using a JSON file, make sure it's an a valid JSON array.  For example, here's
 ```
 
 The format must be perfect JSON or it will fail.  The keys in each JSON hash must be present.  Use a JSON validator if you get errors running this.
-Here's the command-line  to run:
 
 ```bash
 $ keeper import --format=json import.json
 ```
+
+
 
 ### Advanced Configuration File
 
